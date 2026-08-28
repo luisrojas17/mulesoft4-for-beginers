@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="b3e1b0c6-54a6-407d-82c9-70cbb2a750de" >
+		<http:listener-connection host="0.0.0.0" port="38021"/>
+	</http:listener-config>
+	<os:object-store name="Test_Object_Store" doc:name="Object store" doc:id="8c4650ed-489e-411e-b25f-670c84c3467d" persistent="false" />
+	<http:listener-config name="HTTP_Listener_config1" doc:name="HTTP Listener config" doc:id="408d175d-63e1-4ff1-9779-85ea983bb266" >
+		<http:listener-connection host="0.0.0.0" port="19627" />
+	</http:listener-config>
+	<flow name="store-Flow" doc:id="7b65907b-caec-4a46-9efe-91bd122d86dd">
+		<http:listener doc:name="/store GET" doc:id="ea9927f0-3b7b-4413-b84b-01b05d4c6bd4" config-ref="HTTP_Listener_config" path="/api/store" />
+		<set-variable value="#[attributes.queryParams.key]" doc:name="Set key variable" doc:id="60a7fc76-0998-49e8-be2a-fd6aca718f60" variableName="key" />
+		<set-variable value="#[attributes.queryParams.value]" doc:name="Set value variable" doc:id="601cce97-b6ba-47f4-80cf-5dc076bca011" variableName="value" />
+		<logger level="INFO" doc:name="Logger" doc:id="02fd763f-94f1-45e3-aa98-fcf4194c5a12" message='#["There were added key: $(vars.key) and value:  $(vars.value)"]' />
+		<os:store doc:name="Store key value" doc:id="b40f2cf8-664a-48ee-9048-1b717fd8e4b2" key="#[vars.key]" objectStore="Test_Object_Store">
+			<os:value><![CDATA[#[vars.value]]]></os:value>
+		</os:store>
+	</flow>
+	<flow name="retrieve-Flow" doc:id="cd584e1b-9a43-44d5-bac7-149826f1ebdd" >
+		<http:listener doc:name="/retrieve GET" doc:id="9cdbeeaf-79fa-4c6d-bd90-8de95ee09790" config-ref="HTTP_Listener_config1" path="/api/retrieve"/>
+		<set-variable value="#[attributes.queryParams.key]" doc:name="Set key variable" doc:id="c58ce39a-b4f0-45fe-a628-12ff7cbb2a5a" variableName="key"/>
+		<os:retrieve doc:name="Retrieve" doc:id="62d11a81-50f4-42a0-a39f-eff091b2a5be" key="#[vars.key]" objectStore="Test_Object_Store">
+			<os:default-value ><![CDATA[#["No value defined for: $(vars.key)"]]]></os:default-value>
+		</os:retrieve>
+		<logger level="INFO" doc:name="Logger" doc:id="86358cc0-8fbb-4e35-ba84-34da3000ced3" message='#["It was getting the value for key: $(vars.key)"]'/>
+	</flow>
+</mule>

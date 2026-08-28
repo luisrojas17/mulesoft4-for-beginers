@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="order-appFlow" doc:id="448e6167-884c-47ac-8ddc-f58fe60cb7d9" >
+		<http:listener doc:name="/GET Order" doc:id="7bd4af82-6511-4477-bcb5-f7776bf04a57" config-ref="HTTP_Listener_config" path="/order" allowedMethods="GET"/>
+		<set-payload value='{"message": "Hello from Order Endpoint"}' doc:name="Set Payload" doc:id="0f0bfc35-dc5e-4bd3-8218-4fe0509b27cc" />
+		<logger level="INFO" doc:name="Logger" doc:id="38088af1-0b95-4347-b810-909edab856eb" message="The response from order enpoint is: #[payload]"/>
+	</flow>
+</mule>

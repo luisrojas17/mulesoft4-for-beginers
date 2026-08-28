@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="payment-appFlow" doc:id="a0d27183-5cf5-4888-9dfc-0ff2c77e594b" >
+		<http:listener doc:name="/GET Payment" doc:id="2c0a6213-7d25-4584-b868-a2b08bda2ace" config-ref="HTTP_Listener_config" path="/payment" allowedMethods="GET"/>
+		<set-payload value='{"message": "Hello from Payment Endpoint"}' doc:name="Set Payload" doc:id="c96a2231-24ef-4abb-880a-ed12304b7b30" />
+		<logger level="INFO" doc:name="Logger" doc:id="d5d04d26-342e-405a-90d3-f42ab0392a0f" message="The response from Payment endpoint is: #[payload]"/>
+	</flow>
+</mule>
