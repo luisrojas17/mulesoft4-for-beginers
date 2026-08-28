@@ -1,0 +1,492 @@
+{
+	"info": {
+		"_postman_id": "1d53d01d-d756-49d4-b083-fe2b2c407d7f",
+		"name": "MuleSoftForBeginners",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12201400"
+	},
+	"item": [
+		{
+			"name": "ObjectStore",
+			"item": [
+				{
+					"name": "store",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version='1.0' encoding='UTF-8'?>\n<details>\n    <name>Jose Luis Rojas</name>\n    <city>CDMX</city>\n    <country>Mexico</country>\n</details>"
+						},
+						"url": {
+							"raw": "http://localhost:38021/api/store?key=testKey&value=testValue",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "38021",
+							"path": [
+								"api",
+								"store"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "testKey"
+								},
+								{
+									"key": "value",
+									"value": "testValue"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "retrieve",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version='1.0' encoding='UTF-8'?>\n<details>\n    <name>Jose Luis Rojas</name>\n    <city>CDMX</city>\n    <country>Mexico</country>\n</details>"
+						},
+						"url": {
+							"raw": "http://localhost:19627/api/retrieve?key=testKey",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "19627",
+							"path": [
+								"api",
+								"retrieve"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "testKey"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "MuleDomain",
+			"item": [
+				{
+					"name": "order",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:38023/order",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "38023",
+							"path": [
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "payment",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:38023/payment",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "38023",
+							"path": [
+								"payment"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "demo_1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/demo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"demo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "demo_2",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "demo_3",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8061/hello",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8061",
+					"path": [
+						"hello"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "demo_4",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8051/employees",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8051",
+					"path": [
+						"employees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "demo_6",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8041/addTwoNumbers?number1=12&number2=133",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8041",
+					"path": [
+						"addTwoNumbers"
+					],
+					"query": [
+						{
+							"key": "number1",
+							"value": "12"
+						},
+						{
+							"key": "number2",
+							"value": "133"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "demo_6_rm",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://acme-calculator-69kv6o.5sc6y6-1.usa-e2.cloudhub.io/addTwoNumbers?number1=1&number2=13",
+					"protocol": "https",
+					"host": [
+						"acme-calculator-69kv6o",
+						"5sc6y6-1",
+						"usa-e2",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"addTwoNumbers"
+					],
+					"query": [
+						{
+							"key": "number1",
+							"value": "1"
+						},
+						{
+							"key": "number2",
+							"value": "13"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "demo_7",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8031/testFlows",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8031",
+					"path": [
+						"testFlows"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "demo-publish-and-cosume",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Jose Luis\",\n    \"email\": \"amarillo17cyl@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8021/customer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8021",
+					"path": [
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "demo-choice-router",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8011/hello?country=India",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8011",
+					"path": [
+						"hello"
+					],
+					"query": [
+						{
+							"key": "country",
+							"value": "India"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "demo-scatter-rather-route",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8001/demo-sgr",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"demo-sgr"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "demo-consume-external-rest-api",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://demo-consume-external-rest-api-69kv6o.5sc6y6-3.usa-e2.cloudhub.io/api/employees",
+					"protocol": "http",
+					"host": [
+						"demo-consume-external-rest-api-69kv6o",
+						"5sc6y6-3",
+						"usa-e2",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"api",
+						"employees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "demo-consume-external-rest-api_rm",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://demo-consume-external-rest-api-69kv6o.5sc6y6-3.usa-e2.cloudhub.io/api/employees",
+					"protocol": "http",
+					"host": [
+						"demo-consume-external-rest-api-69kv6o",
+						"5sc6y6-3",
+						"usa-e2",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"api",
+						"employees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "demo-convert-message-to-xml",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Jose Luis Rojas\",\n    \"city\": \"CDMX\",\n    \"country\": \"Mexico\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:18080/api/convert-to-xml",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "18080",
+					"path": [
+						"api",
+						"convert-to-xml"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "demo-convert-message-to-xml Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version='1.0' encoding='UTF-8'?>\n<details>\n    <name>Jose Luis Rojas</name>\n    <city>CDMX</city>\n    <country>Mexico</country>\n</details>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:18080/api/convert-to-json",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "18080",
+					"path": [
+						"api",
+						"convert-to-json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "demo-salesforce-query",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:38022/salesforce-query",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "38022",
+					"path": [
+						"salesforce-query"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
