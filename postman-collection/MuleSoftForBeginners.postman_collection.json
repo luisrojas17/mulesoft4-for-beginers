@@ -487,6 +487,25 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "demo-async-scope",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:38024/async",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "38024",
+					"path": [
+						"async"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
