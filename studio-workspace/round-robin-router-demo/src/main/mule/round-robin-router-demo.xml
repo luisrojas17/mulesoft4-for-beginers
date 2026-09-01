@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="f2412da5-d233-489b-b1f5-21c24868ad57" >
+		<http:listener-connection host="0.0.0.0" port="38025" />
+	</http:listener-config>
+	<flow name="round-robin-router-demoFlow" doc:id="1a48267b-e86f-471a-b0ac-765e38235ef8" >
+		<http:listener doc:name="GET Round Robin Router" doc:id="541a0e66-4df9-478f-a0ff-29db7c0b1215" config-ref="HTTP_Listener_config" path="/round-robin-router" allowedMethods="GET"/>
+		<round-robin doc:name="Round Robin" doc:id="77ea962c-ed7c-40f4-9300-a232f8b60dae" >
+			<route >
+				<logger level="INFO" doc:name="Logger for Route 1" doc:id="e53c403e-67ee-4f0e-bd35-07c7c87756e1" message="Setting value for route variable 1..."/>
+				<set-variable value="1" doc:name="RouteProcessor" doc:id="fc03b704-3d1c-47c3-8454-6f05446e9685" variableName="routeProcessor"/>
+			</route>
+			<route >
+				<logger level="INFO" doc:name="Logger for Route 2" doc:id="250220f0-d47a-4d30-ac94-174d17898af1" message="Setting value for route variable 2..."/>
+				<set-variable value="2" doc:name="RouteProcessor" doc:id="6f1e475c-6534-4b8a-bd73-5dc4174eaeeb" variableName="routeProcessor"/>
+			</route>
+			<route >
+				<logger level="INFO" doc:name="Logger for Route 3" doc:id="c7cb7ad7-5954-4581-9374-fa505d07151b" message="Setting value for route variable 3..."/>
+				<set-variable value="3" doc:name="Route Processor" doc:id="4989bea4-7b46-4827-b064-70c447637938" variableName="routeProcessor"/>
+			</route>
+		</round-robin>
+		<ee:transform doc:name="Transform Message" doc:id="6df8977f-8e6d-4773-9767-cf3a4029f740" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "The request was dispatched by Route " ++ vars.routeProcessor
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
