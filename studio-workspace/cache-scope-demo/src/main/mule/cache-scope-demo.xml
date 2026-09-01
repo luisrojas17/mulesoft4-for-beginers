@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="65aa8cd7-26da-4b15-afa0-04b9ba3ac99e" >
+		<http:listener-connection host="0.0.0.0" port="38026" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_config" doc:name="HTTP Request config" doc:id="e94d7cfc-4532-4c99-8777-2bffd033f78d" basePath="${base.path}">
+		<http:request-connection host="${host}" protocol="HTTPS"/>
+	</http:request-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="b772e310-205f-4a76-b0f9-07a615d7992e" file="connection.properties" />
+	<flow name="cache-scope-demoFlow" doc:id="afea46e7-c222-4a9a-8619-cf27264330c7" >
+		<http:listener doc:name="/GET Employee" doc:id="c24a0afe-a6e6-4d99-92cd-dbfff7ee0008" config-ref="HTTP_Listener_config" path="/employee" allowedMethods="GET"/>
+		<logger level="INFO" doc:name="Logger" doc:id="e707c59c-605c-4cb0-b43a-49817c33f6d2" message="Checking if the employeeId #[attributes.queryparams.employeeId] is in cache system..."/>
+		<ee:cache doc:name="Cache" doc:id="fba12293-3ea3-4246-80fb-996738db6d08" >
+			<http:request doc:name="/GET Users" doc:id="621c70df-9b8f-4a3a-9cbf-3d0048e24071" config-ref="HTTP_Request_config" path="#[attributes.queryParams.employeeId]" />
+			<logger level="INFO" doc:name="Logger" doc:id="c3700f6b-51eb-48ea-bba8-c77b54e6d9b9" message="Getting employee from API: ${base.path} and Host: ${host}" />
+		</ee:cache>
+		<logger level="INFO" doc:name="Logger" doc:id="34ee6f09-b92a-4f4a-95cb-9f89cc5c9f5f" message="The employeeId #[payload.data.id] was gotten."/>
+	</flow>
+</mule>
