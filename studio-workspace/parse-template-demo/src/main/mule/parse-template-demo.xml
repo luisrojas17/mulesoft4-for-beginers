@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="2edf0ffc-66f5-4c29-8d49-82f7e852ccf8" >
+		<http:listener-connection host="0.0.0.0" port="38027" />
+	</http:listener-config>
+	<flow name="parse-template-demoFlow" doc:id="c3fec9a8-0b83-4633-b0ad-28419614fce3" >
+		<http:listener doc:name="/POST Employee" doc:id="577b1b3e-2cc6-4dc6-b113-f66e0ac01acb" config-ref="HTTP_Listener_config" allowedMethods="POST" path="/employee"/>
+		<parse-template doc:name="Parse Template" doc:id="91b162a2-c9a3-4946-afb3-9c4884ebc620" >
+			<content >&lt;html&gt;
+  &lt;body&gt;
+    &lt;table border=1&gt;
+      &lt;tr&gt;
+        &lt;th&gt;Employee Name&lt;/th&gt;
+        &lt;th&gt;Employee ID&lt;/th&gt;
+        &lt;th&gt;Employee Email&lt;/th&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td&gt;#[payload.empName]&lt;/td&gt;
+        &lt;td&gt;#[payload.empID]&lt;/td&gt;
+        &lt;td&gt;#[payload.emplEmail]&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</content>
+		</parse-template>
+	</flow>
+</mule>

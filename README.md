@@ -10,6 +10,7 @@ Note: Each example developed used a different HTTP port in case that you require
 To test the API developed for this section you will have to use next data:
 
 - URL: http://localhost:38024/async
+- HTTP Method: GET
 - Collection: demo-async-scope
 
 This is the message structure gotten from API https://gorest.co.in/public/v2/users used by this excersice.
@@ -96,6 +97,7 @@ Note: To see more API examples go to: https://gorest.co.in/
 To test the API developed for this section you will have to use next data:
 
 - URL: http://localhost:38025/round-robin-router
+- HTTP Method: GET
 - Postman Collection: demo-round-robin-route
 
 ### 26. Cache Scope
@@ -103,6 +105,7 @@ To test the API developed for this section you will have to use next data:
 To test the API developed for this section you will have to use next data:
 
 - URL: http://localhost:38026/employee?employeeId=1
+- HTTP Method: GET
 - Postman Collection: demo-cache-scope
 
 This is the message structure gotten from API: https://reqres.in/api/users used by this excersice.
@@ -137,3 +140,10 @@ This is the message structure gotten from API: https://reqres.in/api/users used 
 ```
 ### 27. Parse Template
 
+To test the API developed for this section you will have to use next data:
+
+- URL: http://localhost:38027/employee
+- HTTP Method: POST
+- Postman Collection: demo-parse-template
+
+The output is an HTML template with data sent it.
