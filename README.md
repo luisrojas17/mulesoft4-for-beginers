@@ -5,6 +5,36 @@ This repository contains several projects about how to use MuleSoft 4.
 
 Note: Each example developed used a different HTTP port in case that you require to deploy more than one example at time.
 
+
+### 22. Salesforce connector (query) Basics and Config from properties
+
+This example shows how to use Salesforce connector to to connect to the Salesforce APIs. The data connection are gotten from config properties file.
+
+For more details go to [Mulesoft documentation page.]
+(https://docs.mulesoft.com/salesforce-connector/latest/)
+
+To test the API developed for this section you will have to use next data:
+
+- URL: http://localhost:38022/salesforce-query
+- HTTP Method: GET
+- Collection: demo-salesforce-query
+
+If you get a success result you will see something like next:
+```json
+```
+
+However, if you get a failure result you will see something like next:
+
+```json
+{
+    "status": "Error",
+    "timestamp": "2026-09-01T18:56:04.403446268-06:00",
+    "errorType": "SALESFORCE:INVALID_INPUT",
+    "message": null,
+    "detail": "Failed establishing connection with salesforce"
+}
+```
+
 ### 24. Async Scope
 
 To test the API developed for this section you will have to use next data:
@@ -140,6 +170,10 @@ This is the message structure gotten from API: https://reqres.in/api/users used 
 ```
 ### 27. Parse Template
 
+This example shows how to processing a template to obtain a dynamic result. This component could be useful to send emails based on a template where the dynamic private data are.
+
+For more details go to [Mulesoft documentation page.](https://docs.mulesoft.com/mule-runtime/latest/parse-template-reference)
+
 To test the API developed for this section you will have to use next data:
 
 - URL: http://localhost:38027/employee
@@ -147,3 +181,45 @@ To test the API developed for this section you will have to use next data:
 - Postman Collection: demo-parse-template
 
 The output is an HTML template with data sent it.
+
+### 28. Secure configuration Properties and Secure Configuration Tool
+
+This example shows how to encrypt configuration properties file. The example takes the example developed in the section 22.
+
+For more details go to [Mulesoft documentation page.](https://docs.mulesoft.com/mule-runtime/latest/secure-configuration-properties)
+
+According to the documentation you can use the Secure Properties Tool to encrypt or decrypt text strings. There are two options to use the tool:
+
+- First, you can use online tool hosted on next site: https://secure-properties-api.us-e1.cloudhub.io/
+- Second, you can donwload the JAR from next link: https://docs.mulesoft.com/mule-runtime/latest/_attachments/secure-properties-tool-j17.jar
+
+If you prefered donwloading the JAR to use it from your local environment you will have to use next command:
+
+```
+java -cp secure-properties-tool-j17.jar com.mulesoft.tools.SecurePropertiesTool \
+<method> \
+<operation> \
+<algorithm> \
+<mode> \
+<key> \
+<value> \
+--use-random-iv [optional]
+```
+
+For example:
+
+```
+java -cp secure-properties-tool-j17.jar com.mulesoft.tools.SecurePropertiesTool \
+string \
+encrypt \
+Blowfish \
+CBC \
+myKeyTest \
+"some value to encrypt"
+```
+
+And the output will be: <b>8q5e1+jy0cND2iV2WPThahmz6XsDwB6Z</b>
+
+If you want to decrypt you only have to use "decrypt" word instead of "encrypt". Go to [Parameters Reference](https://docs.mulesoft.com/mule-runtime/latest/secure-configuration-properties#parameter-reference) to see more possible parameters to use with <b>secure-properties-tool-j17.jar</b>
+
+Note: Go to [Supported Algorithms](https://docs.mulesoft.com/mule-runtime/latest/secure-configuration-properties#supported_algorithms) to know all possible options.

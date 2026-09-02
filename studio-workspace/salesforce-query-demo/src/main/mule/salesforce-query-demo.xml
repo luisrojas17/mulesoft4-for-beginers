@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="00e7a4ac-7c2b-4a75-bf4f-7ad5ea2819f9" >
+		<http:listener-connection host="0.0.0.0" port="38022" />
+	</http:listener-config>
+	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="23fcf8c5-16af-4ae5-8a91-e680dd203056" >
+		<salesforce:oauth-user-pass-connection consumerKey="${sfdc.consumer.k}" consumerSecret="${sfdc.consumer.s}" username="${sfdc.username}" password="${secure::sfdc.paswd}" securityToken="${secure::sfdc.token}" />
+	</salesforce:sfdc-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="3f5be787-9814-43b7-aa80-59183bc1de9e" file="config.properties" />
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="68659684-fa6c-4f13-aabb-4e77dda096e4" file="config.properties" key="myKeyTest" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+	<flow name="salesforce-query-demoFlow" doc:id="df4de275-987b-4bc5-af6b-2ffe1f7432f9" >
+		<http:listener doc:name="/GET Contacts" doc:id="f6406e14-68f3-4e0f-a63d-d75967c2603b" config-ref="HTTP_Listener_config" path="/salesforce-query">
+			<ee:repeatable-file-store-stream bufferUnit="MB" />
+			<http:response statusCode="#[(vars.httpStatus as Number) default 200]" />
+			<http:error-response statusCode="#[(vars.httpStatus as Number) default 500]">
+				<http:body><![CDATA[#[payload]]]></http:body> 
+    		</http:error-response>
+		</http:listener>
+		<try doc:name="Try" doc:id="5fcdeb00-84cf-45ed-8944-c0180c008662" >
+			<logger level="INFO" doc:name="Logger" doc:id="7907f032-b40d-4b78-a0ff-374e4382161f" message="Connecting to salesforce: ${sfdc.url}"/>
+			<salesforce:query doc:name="Query" doc:id="5f983398-60e3-4e7d-972f-4ae06fb0d92c" config-ref="Salesforce_Config">
+			<salesforce:salesforce-query><![CDATA[select Id, FirstName, LastName, Email, Phone from Contact limit 200]]></salesforce:salesforce-query>
+		</salesforce:query>
+			<logger level="INFO" doc:name="Logger" doc:id="c67439c1-5273-4b6e-a033-4e1dd1d9fae6" message="The SalesForce's response was: #[payload]"/>
+			<error-handler ref="salesforce-query-connection-Error_Handler" />
+		</try>
+		<set-variable value="200" doc:name="HTTP Success Status Code" doc:id="0565e224-9bf8-4cdd-935f-5cd992e6d244" variableName="httpStatus"/>
+		<ee:transform doc:name="Transform Message" doc:id="ae4e4a4d-8967-4eb7-b6f7-1555e0e19dfa" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<error-handler name="salesforce-query-connection-Error_Handler" doc:id="fd761039-53a0-435f-a32e-bb8f6183022b" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="ed24950d-5474-428d-ab01-19dc3619a08e" >
+			<logger level="ERROR" doc:name="Logger" doc:id="5aafeb90-6445-418c-af26-981d7cee9d46" message="It was an error to connect to SalesForce: #[error]" />
+			<set-variable value="500" doc:name="HTTP Error Status Code" doc:id="45c46fd7-8188-4eee-a779-8d0e244c0068" variableName="httpStatus" />
+			<ee:transform doc:name="Transform Message" doc:id="1f750bb8-1db2-4367-bcf5-ae8415782e11">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"status": "Error",
+    "timestamp": now(),
+    "errorType": error.errorType.namespace ++ ":" ++ error.errorType.identifier,
+    "message": error.errorMessage,
+    "detail": error.detailedDescription
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+		</on-error-propagate>
+	</error-handler>
+</mule>
