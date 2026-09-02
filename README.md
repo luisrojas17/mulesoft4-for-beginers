@@ -1,6 +1,13 @@
 # mulesoft4-for-beginers
 This repository contains several projects about how to use MuleSoft 4.
 
+## Local Environment
+
+The local environemnt used by all these project demos was next:
+
+- Anypoint Studio Version 7.24.0
+- Mule Server 4.11.0 EE
+
 ## Examples
 
 Note: Each example developed used a different HTTP port in case that you require to deploy more than one example at time.
@@ -19,11 +26,11 @@ To test the API developed for this section you will have to use next data:
 - HTTP Method: GET
 - Collection: demo-salesforce-query
 
-If you get a success result you will see something like next:
+The success result is:
 ```json
 ```
 
-However, if you get a failure result you will see something like next:
+The failure result is:
 
 ```json
 {
@@ -180,7 +187,7 @@ To test the API developed for this section you will have to use next data:
 - HTTP Method: POST
 - Postman Collection: demo-parse-template
 
-The output is an HTML template with data sent it.
+The success result is a HTML template with data sent it.
 
 ### 28. Secure configuration Properties and Secure Configuration Tool
 
@@ -223,3 +230,22 @@ And the output will be: <b>8q5e1+jy0cND2iV2WPThahmz6XsDwB6Z</b>
 If you want to decrypt you only have to use "decrypt" word instead of "encrypt". Go to [Parameters Reference](https://docs.mulesoft.com/mule-runtime/latest/secure-configuration-properties#parameter-reference) to see more possible parameters to use with <b>secure-properties-tool-j17.jar</b>
 
 Note: Go to [Supported Algorithms](https://docs.mulesoft.com/mule-runtime/latest/secure-configuration-properties#supported_algorithms) to know all possible options.
+
+### 29. Invoke Java method (static, non-static) from Mule Application
+
+This example shows how to invoke Java methods (either instance or static).
+
+For more details go to [Mulesoft documentation page.](https://docs.mulesoft.com/java-module/latest/java-invoke-method)
+
+To test the API developed for this section you will have to use next data:
+
+- URL: http://localhost:38029/demo-invoke-static-java-method?firstName=Jose%20Luis&secondName=Rojas and http://localhost:38029/demo-invoke-nostatic-java-method?firstName=Jose%20Luis&secondName=Rojas
+- HTTP Method: GET
+- Postman Collection: demo-invoke-static-java-method and demo-invoke-nostatic-java-method
+
+The success result for both endpoints is:
+```json
+{
+    "message": "Hello Jose Luis Rojas Gomez"
+}
+```

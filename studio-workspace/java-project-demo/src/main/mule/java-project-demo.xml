@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:java="http://www.mulesoft.org/schema/mule/java"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="d3773dab-cee9-4374-b843-b9f67dc8b5f2" >
+		<http:listener-connection host="0.0.0.0" port="38029" />
+	</http:listener-config>
+	<flow name="java-project-demoFlow" doc:id="150c5767-8c41-4d8a-b78d-9a2a629b9dbf" >
+		<http:listener doc:name="/GET Invoke Static Java Method" doc:id="9033e0ea-0a82-4594-9b80-bde2532a33a8" config-ref="HTTP_Listener_config" path="/demo-invoke-static-java-method" allowedMethods="GET"/>
+		<logger level="INFO" doc:name="Logger" doc:id="510b42dc-d2c7-4d4b-8ed9-739e0a35159b" message="Invoking static java method..."/>
+		<java:invoke-static method="concat(java.lang.String,java.lang.String)" doc:name="Concat Names" doc:id="488eacba-761d-4a61-9151-a1175bd7046c" class="com.acme.mulesoft.demo.StringHelper" target="result">
+			<java:args ><![CDATA[#[%dw 2.0
+ output application/java
+ ---
+ {
+ 	a: attributes.queryParams.firstName as String,
+ 	b: attributes.queryParams.secondName as String,
+ }]]]></java:args>
+		</java:invoke-static>
+		<logger level="INFO" doc:name="Logger" doc:id="9c4223bc-287d-4b08-9d8f-7951c3bc9328" message="The result was: #[vars.result]"/>
+		<ee:transform doc:name="Transform Message" doc:id="82ca8665-752c-43a1-8984-2880e9c90880" >
+			<ee:message >
+				
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": "Hello " ++ vars.result
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="java-project-demoFlow1" doc:id="f40c2bb1-a567-4190-92c3-3673f53cf50d" >
+		<http:listener doc:name="/GET Invoke No-Static Java Method" doc:id="63c3efa0-9b21-4cf0-8cc4-797577d26404" config-ref="HTTP_Listener_config" path="/demo-invoke-nostatic-java-method" allowedMethods="GET"/>
+		<logger level="INFO" doc:name="Logger" doc:id="73d3f2c2-482a-4937-a26f-379590dece90" message="Invoking no static java method..."/>
+		<java:new doc:name="New Instance" doc:id="e408d438-9de2-44fc-bb99-8ce82a715978" target="strHelper" class="com.acme.mulesoft.demo.StringHelper" constructor="StringHelper()"/>
+		<java:invoke doc:name="Join Names" doc:id="96bb40af-e659-4526-a920-53e82c069e89" instance="#[vars.strHelper]" class="com.acme.mulesoft.demo.StringHelper" method="join(java.lang.String,java.lang.String)" target="result">
+			<java:args ><![CDATA[#[%dw 2.0
+ output application/java
+ ---
+ {
+ 	a: attributes.queryParams.firstName as String,
+ 	b: attributes.queryParams.secondName as String,
+ }]]]></java:args>
+		</java:invoke>
+		<logger level="INFO" doc:name="Logger" doc:id="d5a821b6-b8d2-4d16-abd8-5d48a4fdf66e" message="The result was: #[vars.result]"/>
+		<ee:transform doc:name="Transform Message" doc:id="7fbdc8ca-a96b-40cd-9985-0825d2005eac" >
+			<ee:message >
+				
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": "Hello " ++ vars.result
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
