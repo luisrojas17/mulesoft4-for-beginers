@@ -1,6 +1,19 @@
 # mulesoft4-for-beginers
 This repository contains several projects about how to use MuleSoft 4.
 
+## What is MuleSoft
+MuleSoft is an integration and automation platform owned by Salesforce, used to connect and integrate applications, legacy systems and modern APIs through API-led connectivity.
+
+On the other hand, API-led connectivity is a methodical approach introduced by MuleSoft to connect data and applications through a tiered network of reusable, purposeful application programming interfaces (APIs)
+
+### The Three Layers of API-led Connectivity
+
+MuleSoft's API-led connectivity approach includes three categories of APIs: [1] (https://www.mulesoft.com/api/types-of-apis),
+
+- System APIs: These sit at the bottom layer to unlock data from core backend systems of record, such as databases, ERPs, and legacy mainframes. They handle basic CRUD (Create, Read, Update, Delete) operations and shield the rest of the architecture from underlying database changes. 
+- Process APIs: Sitting in the middle, these APIs take raw data from System APIs and shape, aggregate, or orchestrate it to fulfill specific business logic. They break down data silos without tying business processes to a single data source.
+- Experience APIs: Positioned at the top layer, these format data specifically for the end-channel consuming it, such as a mobile app, web browser, or partner system. This is where security policies, user context, and access governance are enforced.
+
 ## Local Environment
 
 The local environemnt used by all these project demos was next:
@@ -249,3 +262,28 @@ The success result for both endpoints is:
     "message": "Hello Jose Luis Rojas Gomez"
 }
 ```
+
+### 30. Connect SAP System using SAP Connector
+
+This example shows how to connect to SAP system. 
+
+For more details go to [Mulesoft documentation page.](https://docs.mulesoft.com/sap-connector/latest/) and [SAP Connector 5.9 Examples](https://docs.mulesoft.com/sap-connector/latest/sap-connector-examples)
+
+For this demo you will require three JAR files:
+
+- IDoc Library: The SAP Java IDoc Library (SAP JIDocLib) is an add-on library for the SAP Java Connector (SAP JCo). It provides an easy-to-use API for sending and receiving IDocs and IDoc packages to and from SAP systems. The API also helps interpreting and navigating through IDocs and modifying them or creating new ones. In addition, it provides a processing feature for parsing and rendering IDoc-XML documents.
+- JCo Library: The SAP Java Connector (SAP JCo) is a development library that enables a Java application to communicate with SAP systems via SAP's RFC protocol. he SAP JCo supports both communication directions: inbound Remote Function Calls (Java calls ABAP) as well as outbound Remote Function Calls (ABAP calls Java).
+- JCo Native  Library: It depends on the OS.
+  - sapjco3.dll for Window
+  - slibsapjco3.so for Linux and CloudHub
+  - libsapjco3.jnilib or .dylib for macOS
+
+Which you could download from (SAP Marketplace)[https://support.sap.com/en/product/connectors/jco.html?isu_page=1]. However, you must have an active SAP ID (S-User ID) with appropriate software download permissions provided by your company's SAP administrator. These files are proprietary to SAP and cannot be hosted on public Maven central repositories due to licensing.
+
+***Things to know:***
+
+- IDoc (Intermediate Document): A standard data file structure used for asynchronous, batch-based data exchange. 
+- BAPI (Business Application Programming Interface): A standard programming function used for real-time, synchronous data exchange.
+
+IDoc and BAPI are two standard methods used to exchange data between SAP systems and external applications.
+

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:sap="http://www.mulesoft.org/schema/mule/sap"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/sap http://www.mulesoft.org/schema/mule/sap/current/mule-sap.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="c8778d96-9f25-4ac9-8984-3df4ff3b845f" >
+		<http:listener-connection host="0.0.0.0" port="38030" />
+	</http:listener-config>
+	<sap:sap-config name="SAP_Config" doc:name="SAP Config" doc:id="acad1983-1216-481c-b085-092426a51e73" >
+		<sap:simple-connection-provider-connection username="${sap.username}" password="${sap.password}" systemNumber="${sap.system.number}" client="${sap.clientId}" applicationServerHost="${sap.server.host}"/>
+	</sap:sap-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="2226f014-c7b8-4704-b3a6-5259394a7d11" file="config.properties" />
+	<flow name="connet-to-sap-demoFlow" doc:id="c3d44906-e7a3-4f1e-a646-5d4abf6847b9" >
+		<http:listener doc:name="/GET TID" doc:id="6afb2638-0851-4deb-b19c-e00f64e53cfd" config-ref="HTTP_Listener_config" path="/getIDocNumberFromTID?tid=0AB022E872FC5F5DD100011C"/>
+		<set-variable value="#[attributes.queryParams.tid]" doc:name="TID" doc:id="79b7705c-759a-4b60-aca6-6827d1c36d32" variableName="tid"/>
+		<ee:transform doc:name="Transform Message" doc:id="0ac79c11-0d42-4654-8034-87e706fe5042" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+---
+{
+	INBOUND_IDOCS_FOR_TID: {
+		"import": {
+			TID: vars.tid as String
+		}
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<sap:synchronous-remote-function-call doc:name="Synchronous Remote Function Call" doc:id="f366f9c7-0a8d-49cd-8994-fdea66754d1e" config-ref="SAP_Config"/>
+	</flow>
+</mule>
