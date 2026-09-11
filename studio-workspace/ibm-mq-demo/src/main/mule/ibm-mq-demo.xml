@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:ibm-mq="http://www.mulesoft.org/schema/mule/ibm-mq"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ibm-mq http://www.mulesoft.org/schema/mule/ibm-mq/current/mule-ibm-mq.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<ibm-mq:config name="IBM_MQ_Config" doc:name="IBM MQ Config" doc:id="283f10ad-9314-4fd8-a4c5-c43dda74068d" >
+		<ibm-mq:ibm-mq-connection username="${mq.username}" password="${mq.password}">
+			<ibm-mq:connection-mode >
+				<ibm-mq:client host="${mq.host}" port="${mq.port}" queueManager="${mq.queuemanager}" channel="${mq.channel}"/>
+			</ibm-mq:connection-mode>
+		</ibm-mq:ibm-mq-connection>
+	</ibm-mq:config>
+	<configuration-properties doc:name="Configuration properties" doc:id="beed5084-2b88-440c-8ba3-bf89ef7fd8e5" file="config.properties" />
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="67aa2240-20d4-4312-b144-99be2f8b7332" >
+		<http:listener-connection host="0.0.0.0" port="38032" />
+	</http:listener-config>
+	<flow name="ibm-mq-demoFlow" doc:id="10be9f27-bf57-4c86-8e68-bd27de2a2d81" >
+		<http:listener doc:name="/GET Publish message to IBM MQ" doc:id="2229c5d1-b011-4ad5-9dcd-58d23534ede5" path="/sendToIBMMQ" config-ref="HTTP_Listener_config">
+			<http:response statusCode="#[(vars.httpStatusCode as Number) default 200]" />
+			<http:error-response statusCode="#[(vars.httpStatusCode as Number) default 500]" >
+				<http:body ><![CDATA[#[payload]]]></http:body>
+			</http:error-response>
+		</http:listener>
+		<try doc:name="Try" doc:id="f32b0695-6a55-43f7-afdd-807775c09710" >
+			<logger level="INFO" doc:name="Logger" doc:id="926812b8-bf97-4c7a-ae2e-30160d543e24" message="Publishing message to ${mq.queuename}" />
+			<ibm-mq:publish doc:name="Publish" doc:id="188bcd42-8ded-48dd-ae1c-8f503426d6b9" config-ref="IBM_MQ_Config" destination="${mq.queuename}">
+			<ibm-mq:message>
+				<ibm-mq:body><![CDATA[#[{
+	"message": "Sending some test message from MuleSoft."
+}]]]></ibm-mq:body>
+			</ibm-mq:message>
+		</ibm-mq:publish>
+			<logger level="INFO" doc:name="Logger" doc:id="8fca9ca8-27f7-4ecf-b7ad-e84b1ed3ed25" message="Message was published." />
+		</try>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="31ad277b-a48c-4b4c-8267-2cff9ad76ea6" >
+				<logger level="INFO" doc:name="Logger" doc:id="396efb93-3326-4ada-8ed8-1ee07a538ef4" message="It was an error to connect to IBM MQ: #[error]" />
+				<set-variable value="500" doc:name="HTTP Error Status Code" doc:id="0f01aedd-e80a-44fa-b14e-101c963020f0" variableName="httpStatusCode" />
+				<ee:transform doc:name="Transform Message" doc:id="eb45a486-cd58-4f0d-8724-f8c9ffac0d1d">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"status": "Error",
+    "timestamp": now(),
+    "errorType": error.errorType.namespace ++ ":" ++ error.errorType.identifier,
+    "message": error.errorMessage,
+    "detail": error.detailedDescription
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-continue>
+		</error-handler>
+	</flow>
+</mule>

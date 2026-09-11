@@ -54,6 +54,7 @@ The failure result is:
     "detail": "Failed establishing connection with salesforce"
 }
 ```
+Note: In this example you can see how to handle exceptions specially with OnErrorPropagate component.
 
 ### 24. Async Scope
 
@@ -287,3 +288,33 @@ Which you could download from (SAP Marketplace)[https://support.sap.com/en/produ
 
 IDoc and BAPI are two standard methods used to exchange data between SAP systems and external applications.
 
+### 32. Publish Message to IBM MQ using IBM MQ Mule4
+
+This example shows how to connect to IBM MQ system. 
+
+For more details go to [Mulesoft documentation page.](https://docs.mulesoft.com/ibm-mq-connector/latest/)
+
+To test the API developed for this section you will have to use next data:
+
+- URL: http://localhost:38032/sendToIBMMQ
+- HTTP Method: GET
+- Postman Collection: demo-ibm-mq
+
+The success result is:
+```json
+{
+	"message": "Sending some test message from MuleSoft."
+}
+```
+
+The failure result is:
+```json
+{
+    "status": "Error",
+    "timestamp": "2026-09-10T20:24:10.956693612-06:00",
+    "errorType": "IBM-MQ:CONNECTIVITY",
+    "message": null,
+    "detail": "JMSWMQ0018: No se ha podido conectar con el gestor de colas 'QM1' con modalidad de conexión 'Client' y nombre de host 'localhost(1412)'."
+}
+```
+Note: In this example you can see how to handle exceptions specially with OnErrorContinue component.

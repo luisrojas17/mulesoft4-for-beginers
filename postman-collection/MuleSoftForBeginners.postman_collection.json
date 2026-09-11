@@ -572,6 +572,64 @@
 			"response": []
 		},
 		{
+			"name": "demo-invoke-static-java-method",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:38029/demo-invoke-static-java-method?firstName=Jose%20Luis&secondName=Rojas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "38029",
+					"path": [
+						"demo-invoke-static-java-method"
+					],
+					"query": [
+						{
+							"key": "firstName",
+							"value": "Jose%20Luis"
+						},
+						{
+							"key": "secondName",
+							"value": "Rojas"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "demo-invoke-nostatic-java-method",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:38029/demo-invoke-nostatic-java-method?firstName=Jose%20Luis&secondName=Rojas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "38029",
+					"path": [
+						"demo-invoke-nostatic-java-method"
+					],
+					"query": [
+						{
+							"key": "firstName",
+							"value": "Jose%20Luis"
+						},
+						{
+							"key": "secondName",
+							"value": "Rojas"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "demo-parse-template",
 			"request": {
 				"method": "POST",
@@ -594,6 +652,25 @@
 					"port": "38027",
 					"path": [
 						"employee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "demo-ibm-mq",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:38032/sendToIBMMQ",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "38032",
+					"path": [
+						"sendToIBMMQ"
 					]
 				}
 			},
