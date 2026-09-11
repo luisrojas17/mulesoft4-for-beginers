@@ -318,3 +318,33 @@ The failure result is:
 }
 ```
 Note: In this example you can see how to handle exceptions specially with OnErrorContinue component.
+
+### 33. First Successful Router Demo
+
+This example shows how to use First Successful Router. 
+
+For more details go to [Mulesoft documentation page.](https://docs.mulesoft.com/mule-runtime/latest/first-successful)
+
+To test the API developed for this section you will have to use next data:
+
+- URL: http://localhost:38033/first-successful-router-demo
+- HTTP Method: GET
+- Postman Collection: 33-demo-first-successful-route
+
+The success result is:
+```json
+{
+    "message": "The flow was executed successfully by: 3"
+}
+```
+
+The failure result is:
+```json
+{
+    "status": "Error",
+    "timestamp": "2026-09-10T23:47:32.080709108-06:00",
+    "errorType": "MULE:TRANSFORMATION",
+    "message": null,
+    "detail": "An error occurred."
+}
+```

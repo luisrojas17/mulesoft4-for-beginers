@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="ee25f17a-9501-4cb4-a27d-a9b54a1f1357" >
+		<http:listener-connection host="0.0.0.0" port="38033" />
+	</http:listener-config>
+	<flow name="first-successful-router-demoFlow" doc:id="3fc14669-c031-4047-9df9-9edcd53ca166" >
+		<http:listener doc:name="/GET First Successful Route" doc:id="dc03a7ed-046a-4f43-a044-a6d16273a91e" config-ref="HTTP_Listener_config" path="/first-successful-router-demo">
+			<http:error-response statusCode="#[(vars.httpStatusCode as Number) default 500]" >
+				<http:body ><![CDATA[#[payload]]]></http:body>
+			</http:error-response>
+		</http:listener>
+		<first-successful doc:name="First Successful" doc:id="101901ca-8f02-4867-b808-bbda33ec3ee3" >
+			<route >
+				<logger level="INFO" doc:name="Route 1" doc:id="12dd603b-8a88-49bf-9bfd-9024e91e2cce" message="Route 1"/>
+				<logger level="INFO" doc:name="Logger" doc:id="f82690af-5271-4b17-83e6-ea90d4940d95" message="Route 1_2"/>
+				<set-variable value="1" doc:name="Route" doc:id="dbfedcab-810f-4273-a3c6-ad5b4ed4868e" variableName="route"/>
+				<raise-error doc:name="Raise error" doc:id="b40a70eb-40b1-4bda-b986-3eb6004c0e36" type="TRANSFORMATION" />
+			</route>
+			<route >
+				<logger level="INFO" doc:name="Route 2" doc:id="996f9a6e-945f-4417-8db5-5e25e0cafaf3" message="Route 2"/>
+				<set-variable value="2" doc:name="Route" doc:id="484dee56-1201-444e-8e4f-1fa1b25447ee" variableName="route"/>
+				<raise-error doc:name="Raise error" doc:id="ad2ca216-49c5-441b-8ff8-99fecb4bd12c" type="TRANSFORMATION"/>
+			</route>
+			<route >
+				<logger level="INFO" doc:name="Route 3" doc:id="19f08c2f-0fac-4402-81f5-929a59e3aecf" message="Route 3"/>
+				<set-variable value="3" doc:name="Route" doc:id="c460340c-ecf5-41ba-a2e4-997513c88500" variableName="route"/>
+			</route>
+		</first-successful>
+		<logger level="INFO" doc:name="Logger" doc:id="e5a73793-c58c-4498-91e9-711ffc4744c4" message="The flow  was executed successful by: #[vars.route]"/>
+		<ee:transform doc:name="Transform Message" doc:id="32959ebe-41af-48e7-9330-4467908715e4" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": "The flow was executed successfully by: " ++ vars.route
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="c9746099-5490-4673-b245-ee27035bd77b" >
+				<logger level="INFO" doc:name="Logger" doc:id="018ea359-34fe-4008-9e60-9236c04c438f" message="It was occured an error to execute the routers: #[error]"/>
+				<set-variable value="500" doc:name="HTTP Error Status Code" doc:id="c3ec9265-5be0-47d8-92e9-154616f028e9" variableName="httpStatusCode"/>
+				<ee:transform doc:name="Transform Message" doc:id="adf940b7-8e95-4859-af23-5f120a56c186" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"status": "Error",
+    "timestamp": now(),
+    "errorType": error.errorType.namespace ++ ":" ++ error.errorType.identifier,
+    "message": error.errorMessage,
+    "detail": error.detailedDescription
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>
