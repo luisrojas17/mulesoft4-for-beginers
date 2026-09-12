@@ -694,6 +694,25 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "34-demo-until-successful-scope",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:38034/until-successful-scope-demo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "38034",
+					"path": [
+						"until-successful-scope-demo"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

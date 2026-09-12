@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:request-config name="HTTP_Request_config" doc:name="HTTP Request config" doc:id="5063b6f1-fd7f-4b17-a147-48de4d05896f" requestStreamingMode="NEVER">
+		<http:request-connection protocol="HTTPS" host="dummy.restapiexample.com" />
+	</http:request-config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="c98fa7ba-aa91-4bed-badc-63bdef8353d6" >
+		<http:listener-connection host="0.0.0.0" port="38034" />
+	</http:listener-config>
+	<flow name="until-successful-scope-demoFlow" doc:id="755c0600-705f-4213-9a0c-4af308a42f7e" >
+		<http:listener doc:name="/GET Employees" doc:id="c02fc32b-4f0d-46c9-a2c3-2a79d5c62fd0" config-ref="HTTP_Listener_config" path="/until-successful-scope-demo">
+			<http:error-response statusCode="#[(vars.httpStatusCode as Number) default 500]">
+				<http:body ><![CDATA[#[payload]]]></http:body>
+			</http:error-response>
+		</http:listener>
+		<until-successful maxRetries="3" doc:name="Until Successful" doc:id="418363f7-5206-472b-befe-6d7dfd4df8c3" millisBetweenRetries="5000">
+			<http:request doc:name="/GET Employees" doc:id="295552cc-0035-4574-a91c-6691be61201a" config-ref="HTTP_Request_config" path="/api/v1/employees"/>
+			<logger level="INFO" doc:name="Logger" doc:id="656f28df-930d-439c-a372-27b1681dccc2" message="It was gotten the employee list."/>
+		</until-successful>
+		<ee:transform doc:name="Transform Message" doc:id="cc1a9a53-bba6-4082-88c6-83a8d8ade739" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7a45967d-e86a-4591-a89d-62bf409ad308" >
+				<logger level="ERROR" doc:name="Logger" doc:id="b56eb4ee-8ea7-4fde-9da4-69c42d1c9a59" message="It was an exception to get employee list: #[error]"/>
+				<set-variable doc:name="HTTP Error Status Code" doc:id="a0cf141f-9046-4879-850e-edbee83c248a" variableName="httpStatusCode" value="#[error.muleMessage.typedAttributes.statusCode]"/>
+				<logger level="INFO" doc:name="Logger" doc:id="aa9e3b07-fda9-4083-a073-7ab4604050bd" message='The status code is:  #[vars.httpStatusCode]'/>
+				<ee:transform doc:name="Transform Message" doc:id="1d6852e8-17d6-4c89-bc00-990581d86238" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"status": "Error",
+    "timestamp": now(),
+    "errorType": error.errorType.namespace ++ ":" ++ error.errorType.identifier,
+    "message": error.detailedDescription,
+    "detail": error.description
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<logger level="DEBUG" doc:name="Logger" doc:id="31384fb0-6e85-4d08-a742-884826331726" message="This is the payload generated after the transform message: #[payload]"/>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>
