@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:json="http://www.mulesoft.org/schema/mule/json"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="6519122c-a95c-41dc-a7c9-dc0f1f31cbb9" >
+		<http:listener-connection host="0.0.0.0" port="38037" />
+	</http:listener-config>
+	<validation:config name="Validation_Config" doc:name="Validation Config" doc:id="f15901a1-9ad6-4018-9406-f6261a4ced3a" />
+	<flow name="json-validation-schema-demoFlow" doc:id="bdcfa60d-abb3-4876-9710-1c799c60c912" >
+		<http:listener doc:name="/POST person" doc:id="20abe6a0-af7f-4af0-898f-4bde49d065f1" path="/person" config-ref="HTTP_Listener_config" allowedMethods="POST"/>
+		<json:validate-schema doc:name="Validate schema" doc:id="e9144f62-aa98-4976-ad52-ad94f8d7d3fb" schema="schemas/person-data-schema.json"/>
+		<validation:is-email doc:name="Is email" doc:id="32cb7e60-ee10-457f-9c12-91eba5c29489" email="#[payload.email]" config-ref="Validation_Config" message='The email address provided is not valid.'/>
+		<logger level="INFO" doc:name="Logger" doc:id="be92cba0-43f0-4159-9a3d-fa531089d0ea" message="Incoming person data is valid: #[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="3f9f504f-a2b6-4803-969a-5b618c196604" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": "Person data was validated successfully."
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

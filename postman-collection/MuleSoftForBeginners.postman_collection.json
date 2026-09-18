@@ -742,6 +742,34 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "37-demo-json-validation-schema",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"test@gmail.dev\",\n  \"age\": 21\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:38037/person",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "38037",
+					"path": [
+						"person"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

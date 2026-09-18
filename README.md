@@ -662,3 +662,68 @@ The failure result is:
 ```
 
 Note: This excersice uses next external SOAP WebService http://www.dneonline.com/calculator.asmx?wsdl. You can find more details aobut this web service on next [Working with WSDLs](https://www.soapui.org/docs/soap-and-wsdl/working-with-wsdls/).
+
+
+### 37. How to validate JSON using JSON Module and  Validation Module
+
+This example shows how to implement validations in APIs developed into Mule application using: 
+
+- JSON Module -> JSON Schema validation
+- Validation Module -> Email validation
+
+For more details go to [JSON Module](https://docs.mulesoft.com/json-module/latest/) and [Validation Module Examples 2.0](https://docs.mulesoft.com/validation-connector/latest/validation-examples)
+
+To test the API developed for this section you will have to use next data:
+
+- URL: http://localhost:38037/person
+- HTTP Method: POST
+- Postman Collection: 37-demo-json-validation-schema
+
+The request for success result is:
+```json
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "test@gmail.com",
+  "age": 21
+}
+```
+
+The success result is:
+```json
+{
+    "message": "Person data was validated successfully."
+}
+```
+
+First request for failure result is:
+```json
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "test@gmail.com",
+  "age": "21"
+}
+```
+
+The failure result is:
+```json
+[$.age: string found, integer expected]
+```
+
+Second request for failure result is:
+```json
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "test@gmail",
+  "age": 21
+}
+```
+
+The failure result is:
+```json
+The email address provided is not valid.
+```
+
+If you want to know more about JSON Schema and seeing more examples go to: https://json-schema.org/learn/miscellaneous-examples
