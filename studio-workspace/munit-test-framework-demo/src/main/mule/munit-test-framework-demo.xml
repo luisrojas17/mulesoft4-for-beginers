@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="43d2522e-27c4-4d54-b127-2387d6d5008c" >
+		<http:listener-connection host="0.0.0.0" port="38036" />
+	</http:listener-config>
+	<wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="3287e8df-70bd-41a5-abb8-7f36a27bf63f" >
+		<wsc:connection wsdlLocation="calculator.wsdl" port="CalculatorSoap" address="http://www.dneonline.com/calculator.asmx" service="Calculator">
+			<wsc:web-service-security actor="http://schemas.xmlsoap.org/soap/actor/next" />
+		</wsc:connection>
+	</wsc:config>
+	<flow name="munit-test-framework-demoFlow" doc:id="b41e5ad9-6e24-4add-bfc9-f1cbfd166e60" >
+		<http:listener doc:name="/Get Add" doc:id="2ef8fccb-ea11-4f6b-b3cd-1fab763781c6" config-ref="HTTP_Listener_config" path="/add">
+			<http:error-response >
+				<http:body ><![CDATA[#[payload]]]></http:body>
+			</http:error-response>
+		</http:listener>
+		<set-variable value="#[attributes.queryParams.number1]" doc:name="Set Variable" doc:id="e5cf68bc-49ef-4aed-b749-fbdc1e73a99c" variableName="number1"/>
+		<set-variable value="#[attributes.queryParams.number2]" doc:name="Set Variable" doc:id="f94f1dc5-b2c6-4bb1-ac11-1c6c32908116" variableName="number2"/>
+		<ee:transform doc:name="Transform Message" doc:id="a34e58a3-c3b4-46ab-92b5-b845b4460d57" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml 
+ns ns0 http://tempuri.org/
+---
+{
+	ns0#Add: {
+		ns0#intA: vars.number1 as Number,
+		ns0#intB: vars.number2 as Number
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<wsc:consume doc:name="Consume" doc:id="a0026442-8008-4cba-aaa8-28590959af66" config-ref="Web_Service_Consumer_Config" operation="Add"/>
+		<set-variable value="#[%dw 2.0&#10;ns ns0 http://tempuri.org/&#10;---&#10;payload.body.ns0#AddResponse.ns0#AddResult]" doc:name="Set Variable" doc:id="3780ac34-0307-4405-bf1c-3804cf365a4e" variableName="result"/>
+		<logger level="INFO" doc:name="Logger" doc:id="e42545d7-ca88-457f-9651-7ad4265a22f6" message="The result was: #[vars.result]"/>
+		<ee:transform doc:name="Transform Message" doc:id="89d915ef-68c2-45d5-b32d-931d2958d94d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="fdd64a65-9a49-4400-ae43-6ce81549eec3" >
+				<logger level="INFO" doc:name="Logger" doc:id="ff233586-1768-4eba-b3d6-f548ebf31152" message="It was occurred an exception to consume SOAP WebService. #[payload]"/>
+				<logger level="ERROR" doc:name="Logger" doc:id="0d5fe6ed-d0e6-4550-9649-97dd446b1663" message="#[error]"/>
+				<ee:transform doc:name="Transform Message" doc:id="b61ecfa1-69c8-44cc-8149-7ef556fffa7e" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"status": "Error",
+    "timestamp": now(),
+    "errorType": error.errorType.namespace default "" ++ ":" ++ error.errorType.identifier default "",
+    "message": error.detailedDescription default "",
+    "detail": error.description default ""
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>

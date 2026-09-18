@@ -623,3 +623,42 @@ Note: This excersice uses next external API https://dummy.restapiexample.com/api
     "message": "Successfully! All records has been fetched."
 }
 ```
+
+### 36. Munit Testing Framework Demo
+
+This example shows how to implement unit test to test flows developed into Mule application. 
+
+For more details go to [Mulesoft documentation page.](https://docs.mulesoft.com/munit/latest/munit-test-concept)
+
+To test the API developed for this section you will have to use next data:
+
+- URL: http://localhost:38036/add?number1=23&number2=23
+- HTTP Method: GET
+- Postman Collection: 36-demo-munit-testing-framework
+
+The success result is:
+```json
+{
+    "headers": {},
+    "attachments": {},
+    "body": {
+        "AddResponse": {
+            "AddResult": "46"
+        }
+    }
+}
+```
+
+The failure result is:
+```json
+{
+
+    "status": "Error",
+    "timestamp": "2026-09-17T18:06:03.628229172-06:00",
+    "errorType": "WSC:CONNECTIVITY",
+    "message": "Error trying to acquire a new connection:org.mule.wsdl.parser.exception.WsdlGettingException: Error Getting the resource [http://www.dneonline.com/calculator.asmx?wsdl]: Connection reset",
+    "detail": "Error trying to acquire a new connection:org.mule.wsdl.parser.exception.WsdlGettingException: Error Getting the resource [http://www.dneonline.com/calculator.asmx?wsdl]: Connection reset"
+}
+```
+
+Note: This excersice uses next external SOAP WebService http://www.dneonline.com/calculator.asmx?wsdl. You can find more details aobut this web service on next [Working with WSDLs](https://www.soapui.org/docs/soap-and-wsdl/working-with-wsdls/).

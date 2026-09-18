@@ -713,6 +713,35 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "36-demo-munit-testing-framework",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:38036/add?number1=23&number2=23",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "38036",
+					"path": [
+						"add"
+					],
+					"query": [
+						{
+							"key": "number1",
+							"value": "23"
+						},
+						{
+							"key": "number2",
+							"value": "23"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

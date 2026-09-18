@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="munit-test-framework-demo-test-suite.xml" />
+	<munit:test name="munit-test-framework-demo-test-suite-munit-test-framework-successDemoFlowTest" doc:id="f39ecc04-e415-459f-ac90-f8664f8bff6c" description="Test">
+		<munit:behavior >
+			<munit:set-event doc:name="Set Event" doc:id="b388fb61-35b4-4c0e-97af-5079a98f714d" >
+				<munit:attributes value="#[{queryParams: {number1: '10', number2: '13'}}]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to munit-test-framework-demoFlow" doc:id="09dbbb38-927e-47ce-a7fc-45db9da4aac4" name="munit-test-framework-demoFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert expression" doc:id="f9eb931c-1de3-459c-ae51-2ce3ce473086" />
+			<munit-tools:assert-that doc:name="Assert that" doc:id="f24abc5f-9ad3-47dd-9583-9fc38d1ad65f" is="#[MunitTools::greaterThan(0)]" expression="#[vars.result]" message="The result has be grater than zero."/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="munit-test-framework-demo-test-suite-munit-test-framework-failureDemoFlowTest" doc:id="e303194f-2ee7-4d8b-a6bd-5b73517c0f17" description="Test">
+		<munit:behavior>
+        	<munit:set-event doc:name="Set Event" doc:id="523fe6e0-510f-43cf-beb6-c527c72923d6" >
+				<munit:attributes value="#[{queryParams: {number1: '10', number2: '13'}}]" />
+			</munit:set-event>
+			<munit-tools:mock-when processor="wsc:consume">
+	            <munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Add" attributeName="operation" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+    	            <munit-tools:error typeId="#['WSC:CONNECTIVITY']"/> 
+        	    </munit-tools:then-return>
+        	</munit-tools:mock-when>
+    	</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to munit-test-framework-demoFlow" doc:id="c3a65f8b-3403-4607-a725-1eaf04d82edd" name="munit-test-framework-demoFlow"/>
+		</munit:execution>
+	</munit:test>
+
+</mule>
