@@ -770,6 +770,25 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "38-demo-excel",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:38038/departments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "38038",
+					"path": [
+						"departments"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

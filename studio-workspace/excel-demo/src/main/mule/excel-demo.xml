@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<file:config name="File_Config" doc:name="File Config" doc:id="51a70595-e708-4f05-a109-93555d593caf" >
+		<file:connection workingDir="${app.home}"/>
+	</file:config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="9b576342-4394-45d6-9c8d-67a5af999a85" >
+		<http:listener-connection host="0.0.0.0" port="38038" />
+	</http:listener-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="9743af7c-dde2-4adc-ba5b-19b7bc6b820b" file="config.properties" />
+	<flow name="excel-demoFlow" doc:id="960640a2-92f8-471f-b897-e5b38357d662" >
+		<http:listener doc:name="/GET departments" doc:id="e7c015fb-4295-4303-b4a8-270837bc640a" config-ref="HTTP_Listener_config" path="/departments">
+			<http:response statusCode="#[(vars.httpStatusCode as Number) default 200]" />
+		</http:listener>
+		<logger level="INFO" doc:name="Logger" doc:id="57627f17-c04e-4209-b8b7-4a6c7bcd0eb1" message="Reading file: ${filename}"/>
+		<file:read doc:name="Read" doc:id="7ee6b250-a8cf-4855-9139-8e09de2a7651" config-ref="File_Config" path="${filename}" outputMimeType="application/xlsx"/>
+		<choice doc:name="Choice" doc:id="ad2cd31e-785f-47b0-9f54-3131c428cc92" >
+			<when expression="#[payload != null and payload.Sheet1 != null and (sizeOf(payload.Sheet1) &gt; 0)]">
+				<set-variable value="#[%dw 2.0 output application/java --- sizeOf(payload.Sheet1)]" doc:name="Set Variable" doc:id="e609f559-547e-4b11-b287-18f70d4e11b3" variableName="totalOfRecords" />
+				<ee:transform doc:name="Transform Message" doc:id="2d6e395e-02f8-4965-9920-a6e69489ff44">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload.Sheet1]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<set-variable value="0" doc:name="Set Variable" doc:id="17da897b-a8bf-4774-bd09-fe92c72440e5" variableName="totalOfRecords"/>
+				<set-variable value="204" doc:name="HTTP Status  Code" doc:id="3e765236-cf32-4135-ad84-696f2f3db189" variableName="httpStatusCode"/>
+				<set-payload value="#[payload]" doc:name="Set Payload" doc:id="a2604e93-da1e-43cd-94ac-9c58bc131159" />
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="b013700d-7950-4e47-800b-f5ed99006a54" message='#["There were $(vars.totalOfRecords) records."]' />
+		<logger level="INFO" doc:name="Logger" doc:id="1f701d28-6cf0-46a0-ad01-92532597b8d8" message='It was processed the file ${filename}.'/>
+		<ee:transform doc:name="Transform Message" doc:id="663a0228-4ad4-45be-9d14-2c5a50163f65" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

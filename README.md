@@ -727,3 +727,42 @@ The email address provided is not valid.
 ```
 
 If you want to know more about JSON Schema and seeing more examples go to: https://json-schema.org/learn/miscellaneous-examples
+
+### 38. Read an Excel File Demo
+
+This example shows how to read an Excel file saved into Mule application.
+
+For more details go to [Read a File Using the File Connector](https://docs.mulesoft.com/file-connector/latest/file-read) and
+[Excel Format](https://docs.mulesoft.com/dataweave/latest/dataweave-formats-excel).
+
+To test the API developed for this section you will have to use next data:
+
+- URL: http://localhost:38038/departments
+- HTTP Method: GET
+- Postman Collection: 38-demo-excel
+
+The success result is:
+```json
+[
+    {
+        "Name": "Arul",
+        "Department": "IT",
+        "Experience": 5
+    },
+    {
+        "Name": "Luis",
+        "Department": "Testing",
+        "Experience": 3
+    },
+    {
+        "Name": "John",
+        "Department": "Testing",
+        "Experience": 10
+    }
+]
+```
+
+The failure result is:
+```json
+
+```
