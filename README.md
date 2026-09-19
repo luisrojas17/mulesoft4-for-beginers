@@ -6,6 +6,8 @@ MuleSoft is an integration and automation platform owned by Salesforce, used to 
 
 On the other hand, API-led connectivity is a methodical approach introduced by MuleSoft to connect data and applications through a tiered network of reusable, purposeful application programming interfaces (APIs)
 
+For more details vistit: [MuleSoft Documentation](https://docs.mulesoft.com/general/)
+
 ### The Three Layers of API-led Connectivity
 
 MuleSoft's API-led connectivity approach includes three categories of APIs: [1] (https://www.mulesoft.com/api/types-of-apis),
@@ -13,6 +15,20 @@ MuleSoft's API-led connectivity approach includes three categories of APIs: [1] 
 - System APIs: These sit at the bottom layer to unlock data from core backend systems of record, such as databases, ERPs, and legacy mainframes. They handle basic CRUD (Create, Read, Update, Delete) operations and shield the rest of the architecture from underlying database changes. 
 - Process APIs: Sitting in the middle, these APIs take raw data from System APIs and shape, aggregate, or orchestrate it to fulfill specific business logic. They break down data silos without tying business processes to a single data source.
 - Experience APIs: Positioned at the top layer, these format data specifically for the end-channel consuming it, such as a mobile app, web browser, or partner system. This is where security policies, user context, and access governance are enforced.
+
+### Key Components in AnyPoint Pltform
+
+AnyPoint Platform is composed by next components:
+
+- [Design Center](https://docs.mulesoft.com/design-center/): It is used to design your API. Design center is a development environment which enables you to create PI specifications.
+- [AnyPoint Exchange](https://docs.mulesoft.com/exchange/): It is to exchange our assets across the organization. The Exchange is mainly used for organization purpose to share and publish the API specification to the public portal.
+- [Management Center](https://docs.mulesoft.com/general/learning-map-api-management): It is used to manage all the life cicly regarding your APIs
+    - [Access Management](https://docs.mulesoft.com/access-management/)
+    - [API Manager](https://docs.mulesoft.com/api-manager/latest/latest-overview-concept)
+    - [Runtime manager](https://docs.mulesoft.com/runtime-manager/)
+    - [Visualizer](https://docs.mulesoft.com/visualizer/)
+    - [Monitoring](https://docs.mulesoft.com/monitoring/)
+
 
 ## Local Environment
 
@@ -766,3 +782,23 @@ The failure result is:
 ```json
 
 ```
+
+[!NOTE](Note)
+
+If you get an error like this "<b>Cannot coerce Number (3) to Object</b>" when you are trying to get the Excel' size records to assign to variable inside <when> block. Check next:
+
+
+#### Explanation
+Take a look at how DataWeave evaluates sequential steps in Mule 4. In your <when> expression, the condition passes perfectly because payload is an Excel Object. However, the expression inside your Set Variable component is missing the target data type output.
+
+By default, when you use # [sizeOf(payload.Sheet1)] inside a Set Variable component, MuleSoft tries to implicitly convert the resulting number 3 back into an application-type Java Object to store it. This triggers the error: "Cannot coerce Number (3) to Object"
+
+#### The Fix
+You need to explicitly tell DataWeave to output the variable value as application/java or a plain number.Modify your <set-variable> tag inside the <when> block to use explicit DataWeave syntax like this:
+
+```xml
+<set-variable value="#[%dw 2.0 output application/java --- sizeOf(payload.Sheet1)]" doc:name="Set Variable" doc:id="e609f559-547e-4b11-b287-18f70d4e11b3" variableName="totalOfRecords" />
+```
+
+#### Why your Choice condition works but the Variable fails:
+- The Set Variable (#[...]): Without specifying output application/java, Mule 4 handles the raw Number typed response poorly in inline expressions, leading it to assume it needs to wrap it as a generic Object, causing the coercion failure.
