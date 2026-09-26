@@ -1,0 +1,60 @@
+#%RAML 1.0
+title: customer-api
+
+description: This is a customer API to manage the customer data.
+
+/customer:
+  get:
+    description: This method retrieve the customer information from the system.
+    queryParameters:
+      id:
+        required: true
+        example: 
+          value: "123456789"
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+              {
+                "id": "12345",
+                "firstName": "Jose Luis",
+                "lastName": "Rojas"
+              }
+      500:
+        body:
+          application/json:
+            example:
+              {
+                message: "There was an internal error to process the request."
+              }
+  post:
+    description: "This method will allow to create the customer information in the system."
+    body:
+      application/json:
+        example:
+          {
+            "firstName": "John",
+            "lastName": "Do"
+          }
+    responses:
+      201:
+        description: "The customer was created successfully."
+        body:
+          application/json:
+            example:
+              {
+                "id": "12342",
+                "firstName": "John",
+                "lastName": "Do"
+              }
+      500:
+        description: "There was an error to process this request."
+        body:
+          application/json:
+            example:
+              {
+                message: "There was an internal error to process the request."
+              }
+        
+          

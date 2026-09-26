@@ -802,3 +802,55 @@ You need to explicitly tell DataWeave to output the variable value as applicatio
 
 #### Why your Choice condition works but the Variable fails:
 - The Set Variable (#[...]): Without specifying output application/java, Mule 4 handles the raw Number typed response poorly in inline expressions, leading it to assume it needs to wrap it as a generic Object, causing the coercion failure.
+
+### 40. API from RAML Created in Desing Center
+
+This example shows how to create the API implementation from API Specification which was created in Design Center. Basically the steps to follow are next:
+
+- Create the API specification in Design Center.
+- Share the API specificationin Design Center to Exchange. Basically, this process will place the specification in Exchange.
+- Once the API specification was placed in Exchange, you will have to publish the API specification into public portal.
+
+To test the API developed for this section you will have to use next data:
+
+- URL: http://localhost:48040/api/customer?id=12345 and http://localhost:48040/api/customer
+- HTTP Method: GET
+- Postman Collection: 40-demo-customer-api-200 and 40-demo-customer-api-400-bad-request
+
+The success result is:
+```json
+{
+    "id": "12345",
+    "firstName": "Jose Luis",
+    "lastName": "Rojas"
+}
+```
+
+The failure result is:
+```json
+{
+    "message": "Bad request"
+}
+```
+
+- URL: http://localhost:48040/api/customer
+- HTTP Method: POST
+- Postman Collection: 40-demo-customer-api-200
+
+The success result is:
+```json
+{
+  "firstName": "John",
+  "lastName": "Do"
+}
+```
+
+The failure result is:
+```json
+{
+    "id": "12342",
+    "firstName": "John",
+    "lastName": "Do"
+}
+```
+
