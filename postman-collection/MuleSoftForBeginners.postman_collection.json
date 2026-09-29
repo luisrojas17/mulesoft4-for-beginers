@@ -789,6 +789,110 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "40-demo-customer-api-400-bad-request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:48040/api/customer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "48040",
+					"path": [
+						"api",
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "40-demo-customer-api-200",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:48040/api/customer?id=12345",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "48040",
+					"path": [
+						"api",
+						"customer"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "12345"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "40-demo-customer-api-200-RM",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://customer-api-demo-z6mshs.5sc6y6-3.usa-e2.cloudhub.io/api/customer?id=12345",
+					"protocol": "https",
+					"host": [
+						"customer-api-demo-z6mshs",
+						"5sc6y6-3",
+						"usa-e2",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"api",
+						"customer"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "12345"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "40-demo-customer-api-200",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Do\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:48040/api/customer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "48040",
+					"path": [
+						"api",
+						"customer"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

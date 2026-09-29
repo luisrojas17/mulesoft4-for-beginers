@@ -746,7 +746,7 @@ If you want to know more about JSON Schema and seeing more examples go to: https
 
 ### 38. Read an Excel File Demo
 
-This example shows how to read an Excel file saved into Mule application.
+The **excel-demo** example shows how to read an Excel file saved into Mule application.
 
 For more details go to [Read a File Using the File Connector](https://docs.mulesoft.com/file-connector/latest/file-read) and
 [Excel Format](https://docs.mulesoft.com/dataweave/latest/dataweave-formats-excel).
@@ -783,9 +783,8 @@ The failure result is:
 
 ```
 
-[!NOTE](Note)
-
-If you get an error like this "<b>Cannot coerce Number (3) to Object</b>" when you are trying to get the Excel' size records to assign to variable inside <when> block. Check next:
+> [!NOTE]
+> If you get an error like this "<b>Cannot coerce Number (3) to Object</b>" when you are trying to get the Excel' size records to assign to variable inside <when> block. Check next:
 
 
 #### Explanation
@@ -805,7 +804,7 @@ You need to explicitly tell DataWeave to output the variable value as applicatio
 
 ### 40. API from RAML Created in Desing Center
 
-This example shows how to create the API implementation from API Specification which was created in Design Center. Basically the steps to follow are next:
+The **customer-api-demo** example shows how to create the API implementation from API Specification which was created in Design Center. Basically the steps to follow are next:
 
 - Create the API specification in Design Center.
 - Share the API specificationin Design Center to Exchange. Basically, this process will place the specification in Exchange.
@@ -854,3 +853,75 @@ The failure result is:
 }
 ```
 
+The second version of this example has implemented a "Rate Limiting" policy in order to limit the number of request allowed for a specific period of time. In this case, maximum three request for one minute. This policy was enabled for all endpoints defined in this Mule application. For more infromation [See API Autodiscovery](https://docs.mulesoft.com/mule-gateway/mule-gateway-autodiscovery-overview). 
+
+The process to configure the policy and test it is next:
+
+**First step**, you will have to add a new API into API Manager.
+- Go to API Manager once you created the API specification, exposed the RAML specification through Exchange and the specification was published into Public Portal.
+- Go to Add new API
+    - Select runtime: Mule Gateway
+    - Proxy type: Connect to existing application (basic endpoint) 
+    - Mule version: Mule 4 (recommended)
+    - Click on Next button
+- Go to API
+    - Select API from Exchange
+    - Type the API exponsed/configured name into Exchance if it is not displayed
+    - Asset type: RAML/OAS
+    - API version: v1 (Latest)
+    - Asset version: 1.0.0 (Latest)
+    - Click on Next button 
+
+    The wizard will show you several data related to the API Instance. In this case, the most important data is:
+
+    - API Instance ID. This value will be necessary to linked this API instance with the Mule application. [Configuring Mule Gateway API Autodiscovery in a Mule 4 Application](https://docs.mulesoft.com/mule-gateway/mule-gateway-config-autodiscovery-mule4). 
+    - API status. This value will be "Unregistered" which will change when the API is going to linked with the application into Runtime Manager.
+
+**Second step**, you will have to add API Autodiscovery component configuration.
+- Through AnyPoint Studio you will have to add an API Autodiscovery Component Configuration. In this case, you will need next:
+    - The API instance number. This value was gotten when you configure the API Instance into API Manager. 
+    - The Flow Name. This value is regarding the main Flow in your Mule Application.
+- Add/Change the HTTP port Listener to 8081.
+- Create the jar for deploying it into Runtime Manager.
+
+> [!NOTE]
+> Go to "mule-maven-plugin" section into pom.xml file. This plugin contains that configuration in order to avoid Runtime Manager failed when your are deploying the Mule Application since the platform try to publish the API specification into Exchange by default with the same artifact name when you are trying deploying a new Mule Application.
+
+**Third step**, you will have to deploy the Mule Application into Runtime Manager
+- Go to Runtime Manager
+- Select an environment. In this case, Sandbox since it was used a trial account for Anypoint Platform.
+- Go to Runtime tab 
+    - Select the JAR file name which represents the Mule Application to deploy
+    - Give an application name
+    - The other information can be by default
+- Go to Properties tab
+    - Add a next properties:
+        - anypoint.platform.client_id 	 
+        - anypoint.platform.client_secret
+
+    > [!Note]
+    > Those values can be gotten from "Access Management -> Business Groups -> Organization Name -> Envoronments Tab". Identify the enviroment chosen, click on that and copy the Client ID and Client Secret. This is because when you use API Autodiscovery or deploy an API managed by an API manager, the Mule runtime expects environment variables that authenticate the runtime against your Anypoint Organization.
+
+Once your Mule Application is "Rinnung" you can test the API developed for this section with next data:
+
+- URL: https://customer-api-demo-z6mshs.5sc6y6-3.usa-e2.cloudhub.io/api/customer?id=12345
+- HTTP Method: GET
+- Postman Collection: 40-demo-customer-api-200-RM
+
+The success result is:
+```json
+{
+    "id": "12345",
+    "firstName": "Jose Luis",
+    "lastName": "Rojas"
+}
+```
+After three request you will get a response like next:
+
+The failure result is:
+```json
+{
+    "error": "Quota has been exceeded"
+}
+
+This is because the Mule Application has a policy which limit the total of request to three for a pediod of time.
