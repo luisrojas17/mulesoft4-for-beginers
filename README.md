@@ -899,7 +899,7 @@ The process to configure the policy and test it is next:
         - anypoint.platform.client_id 	 
         - anypoint.platform.client_secret
 
-    > [!Note]
+    > [!NOTE]
     > Those values can be gotten from "Access Management -> Business Groups -> Organization Name -> Envoronments Tab". Identify the enviroment chosen, click on that and copy the Client ID and Client Secret. This is because when you use API Autodiscovery or deploy an API managed by an API manager, the Mule runtime expects environment variables that authenticate the runtime against your Anypoint Organization.
 
 Once your Mule Application is "Rinnung" you can test the API developed for this section with next data:
@@ -923,5 +923,6 @@ The failure result is:
 {
     "error": "Quota has been exceeded"
 }
+```
 
 This is because the Mule Application has a policy which limit the total of request to three for a pediod of time.
