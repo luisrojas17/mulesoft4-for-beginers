@@ -953,7 +953,7 @@ After installing Runtime Manager On-Premise you have to deploy the application t
 - Click on Deploy Application
 
 > [!NOTE]
-> For more details go to [Deploy Mule Applications.](https://docs.mulesoft.com/mule-runtime/latest/deploying)s
+> For more details go to [Deploy Mule Applications.](https://docs.mulesoft.com/mule-runtime/latest/deploying)
 
 If the deploy was successful you will see somethig like this in each node:
 ```
