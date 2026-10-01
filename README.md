@@ -1,5 +1,5 @@
 # mulesoft4-for-beginers
-This repository contains several projects about how to use MuleSoft 4.
+This repository contains several projects about how to use MuleSoft 4. All of these examples are based on Udemy Course **MuleSoft (Mule4) for Beginners/Developers | Mule ESB | Mule by Arul ChristhuRaj Alphonse**.
 
 ## What is MuleSoft
 MuleSoft is an integration and automation platform owned by Salesforce, used to connect and integrate applications, legacy systems and modern APIs through API-led connectivity.
@@ -34,8 +34,11 @@ AnyPoint Platform is composed by next components:
 
 The local environemnt used by all these project demos was next:
 
+- Ubuntu 26.04 LTS
 - Anypoint Studio Version 7.24.0
-- Mule Server 4.11.0 EE
+- Mule Server Runtime 4.11.0 EE
+- Oracle Corporationas Java vendor and JDK 17.0.9 (mixed mode)
+- Mule Runtime Manager 4.12.2. For On-Premise installation.
 
 ## Examples
 
@@ -44,7 +47,7 @@ Note: Each example developed used a different HTTP port in case that you require
 
 ### 22. Salesforce connector (query) Basics and Config from properties
 
-This example shows how to use Salesforce connector to to connect to the Salesforce APIs. The data connection are gotten from config properties file.
+The **salesforce-query-demo** example shows how to use Salesforce connector to to connect to the Salesforce APIs. The data connection are gotten from config properties file.
 
 For more details go to [Mulesoft documentation page.]
 (https://docs.mulesoft.com/salesforce-connector/latest/)
@@ -70,7 +73,8 @@ The failure result is:
     "detail": "Failed establishing connection with salesforce"
 }
 ```
-Note: In this example you can see how to handle exceptions specially with OnErrorPropagate component.
+> [!NOTE]
+> In this example you can see how to handle exceptions specially with OnErrorPropagate component.
 
 ### 24. Async Scope
 
@@ -157,7 +161,8 @@ This is the message structure gotten from API https://gorest.co.in/public/v2/use
 ]
 ```
 
-Note: To see more API examples go to: https://gorest.co.in/
+> [!NOTE]
+> To see more API examples go to: https://gorest.co.in/
 
 ### 25. Round Robin Router
 
@@ -259,7 +264,8 @@ And the output will be: <b>8q5e1+jy0cND2iV2WPThahmz6XsDwB6Z</b>
 
 If you want to decrypt you only have to use "decrypt" word instead of "encrypt". Go to [Parameters Reference](https://docs.mulesoft.com/mule-runtime/latest/secure-configuration-properties#parameter-reference) to see more possible parameters to use with <b>secure-properties-tool-j17.jar</b>
 
-Note: Go to [Supported Algorithms](https://docs.mulesoft.com/mule-runtime/latest/secure-configuration-properties#supported_algorithms) to know all possible options.
+> [!NOTE]
+> Go to [Supported Algorithms](https://docs.mulesoft.com/mule-runtime/latest/secure-configuration-properties#supported_algorithms) to know all possible options.
 
 ### 29. Invoke Java method (static, non-static) from Mule Application
 
@@ -333,7 +339,8 @@ The failure result is:
     "detail": "JMSWMQ0018: No se ha podido conectar con el gestor de colas 'QM1' con modalidad de conexión 'Client' y nombre de host 'localhost(1412)'."
 }
 ```
-Note: In this example you can see how to handle exceptions specially with OnErrorContinue component.
+> [!NOTE]
+> In this example you can see how to handle exceptions specially with OnErrorContinue component.
 
 ### 33. First Successful Router Demo
 
@@ -461,7 +468,8 @@ The failure result is:
 }
 ```
 
-Note: This excersice uses next external API https://dummy.restapiexample.com/api/v1/employees.
+> [!NOTE]
+> This excersice uses next external API https://dummy.restapiexample.com/api/v1/employees.
 
 ```json
 {
@@ -677,8 +685,8 @@ The failure result is:
 }
 ```
 
-Note: This excersice uses next external SOAP WebService http://www.dneonline.com/calculator.asmx?wsdl. You can find more details aobut this web service on next [Working with WSDLs](https://www.soapui.org/docs/soap-and-wsdl/working-with-wsdls/).
-
+> [!NOTE]
+> This excersice uses next external SOAP WebService http://www.dneonline.com/calculator.asmx?wsdl. You can find more details aobut this web service on next [Working with WSDLs](https://www.soapui.org/docs/soap-and-wsdl/working-with-wsdls/).
 
 ### 37. How to validate JSON using JSON Module and  Validation Module
 
@@ -888,7 +896,7 @@ The process to configure the policy and test it is next:
 > Go to "mule-maven-plugin" section into pom.xml file. This plugin contains that configuration in order to avoid Runtime Manager failed when your are deploying the Mule Application since the platform try to publish the API specification into Exchange by default with the same artifact name when you are trying deploying a new Mule Application.
 
 **Third step**, you will have to deploy the Mule Application into Runtime Manager
-- Go to Runtime Manager
+- Go to Runtime Manager inside AnyPoint Mulesoft Platform
 - Select an environment. In this case, Sandbox since it was used a trial account for Anypoint Platform.
 - Go to Runtime tab 
     - Select the JAR file name which represents the Mule Application to deploy
@@ -902,7 +910,7 @@ The process to configure the policy and test it is next:
 > [!NOTE]
 > Those values can be gotten from "Access Management -> Business Groups -> Organization Name -> Envoronments Tab". Identify the enviroment chosen, click on that and copy the Client ID and Client Secret. This is because when you use API Autodiscovery or deploy an API managed by an API manager, the Mule runtime expects environment variables that authenticate the runtime against your Anypoint Organization.
 
-Once your Mule Application is "Rinnung" you can test the API developed for this section with next data:
+Once your Mule Application is "Running" you can test the API developed with next data:
 
 - URL: https://customer-api-demo-z6mshs.5sc6y6-3.usa-e2.cloudhub.io/api/customer?id=12345
 - HTTP Method: GET
@@ -926,3 +934,54 @@ The failure result is:
 ```
 
 This is because the Mule Application has a policy which limit the total of request to three for a pediod of time.
+
+### 43. Create Group or Clustering for On-Premise Mule Runtime through Runtime Manager
+
+The **deployment-demo** example contains a basic Mulesoft Application which define HTTP API which responses a simple message. The goal for this API is only to deploy purposes On-Premise Group Server/Cluster.
+
+To know more about how to install MuleSoft Runtime Manager On-Premise go [here](ConfigMuleSoftClusterOnPremise.md).
+
+After installing Runtime Manager On-Premise you have to deploy the application through Mulesoft Control Plane. Basically, to deploy the Mulesoft Application you have to follow next:
+
+- Go to Runtime Manager inside AnyPoint Mulesoft Platform
+- Select an environment. In this case, Sandbox since it was used a trial account for Anypoint Platform.
+- Click on Deploy Application button
+- Choose JAR file name path location
+- Set Application Name which represents the Mule Application to deploy
+- Click on Deployment Target
+    - Select Hybrid mode and cluster-1. This is the name given for your server group or cluster created.
+- Click on Deploy Application
+
+If the deploy was successful you will see somethig like this in each node:
+```
+INFO  2026-09-30 19:43:00,059 [WrapperListener_start_runner] [processor: ; event: ] com.mulesoft.mule.runtime.gw.client.provider.ApiPlatformClientProvider: Client ID and Client Secret successfully validated against API Manager.
+ + Starting app 'deployment-demo'
+
+**********************************************************************
+* Started app 'deployment-demo'                                      *
+* Application plugins:                                               *
+*  - Sockets : 1.2.7                                                 *
+*  - HTTP : 1.11.1                                                   *
+**********************************************************************
+ + Mule is up and kicking (every 5000ms)
+
+**********************************************************************
+*            - - + APPLICATION + - -            * - - + STATUS + - - *
+**********************************************************************
+* deployment-demo                               * DEPLOYED           *
+**********************************************************************
+```
+
+Once your Mule Application is "Running" you can test the API developed with next data:
+
+- URL for node 1: http://localhost:18085/deployment-demo
+- URL for node 2: http://localhost:28085/deployment-demo
+- HTTP Method: GET
+- Postman Collection: 43-demo-deployment
+
+The success result is:
+```json
+{
+    "message": "Deployment demo was successfully."
+}
+```

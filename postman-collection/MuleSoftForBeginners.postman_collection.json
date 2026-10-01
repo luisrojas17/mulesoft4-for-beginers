@@ -893,6 +893,25 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "43-demo-deployment",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:28085/deployment-demo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28085",
+					"path": [
+						"deployment-demo"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

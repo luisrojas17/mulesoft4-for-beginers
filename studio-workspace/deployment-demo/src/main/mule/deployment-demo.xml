@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="aaf44996-6ee6-4ede-bd5a-37e860b4b301" >
+		<http:listener-connection host="0.0.0.0" port="${http.port}" />
+	</http:listener-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="d9fe159f-3054-428a-a1e8-5c1e8edf4840" file="config.properties" />
+	<flow name="deployment-demoFlow" doc:id="bab4202a-b402-41c7-a1e4-7417ee62bf49" >
+		<http:listener doc:name="/GET Deployment Demo" doc:id="355b7a24-d7b3-46d0-93d0-b3c2f3ac83b0" config-ref="HTTP_Listener_config" path="/deployment-demo"/>
+		<ee:transform doc:name="Transform Message" doc:id="c2ddd681-0846-47ae-a4d7-dbab459876de" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": "Deployment demo was successfully."
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
