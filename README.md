@@ -952,6 +952,9 @@ After installing Runtime Manager On-Premise you have to deploy the application t
     - Select Hybrid mode and cluster-1. This is the name given for your server group or cluster created.
 - Click on Deploy Application
 
+> [!NOTE]
+> For more details go to [Deploy Mule Applications.](https://docs.mulesoft.com/mule-runtime/latest/deploying)s
+
 If the deploy was successful you will see somethig like this in each node:
 ```
 INFO  2026-09-30 19:43:00,059 [WrapperListener_start_runner] [processor: ; event: ] com.mulesoft.mule.runtime.gw.client.provider.ApiPlatformClientProvider: Client ID and Client Secret successfully validated against API Manager.
