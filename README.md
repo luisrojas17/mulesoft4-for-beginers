@@ -28,7 +28,7 @@ AnyPoint Platform is composed by next components:
     - [Runtime manager](https://docs.mulesoft.com/runtime-manager/)
     - [Visualizer](https://docs.mulesoft.com/visualizer/)
     - [Monitoring](https://docs.mulesoft.com/monitoring/)
-
+- [AnyPoint CLI](https://docs.mulesoft.com/anypoint-cli/latest/): It is a scripting and command-line tools for Anypoint Platform and Anypoint Platform Private Cloud Edition (PCE) used to automate platform operations, manage applications, and integrate with CI/CD pipelines.
 
 ## Local Environment
 
