@@ -1,0 +1,50 @@
+asyncapi: 2.6.0
+info:
+  title: customer-async-api
+  version: '1.0.0'
+channels:
+  customer:
+    publish:
+      message:
+        payload:
+          type: object
+          properties:
+            firstName:
+              type: string
+              example: "John"
+              description: "This field is to provide customer's first name."
+            lastName:
+              type: string
+              example: "Do"
+              description: "This field is to provide customer's last name."
+
+  customerResponse:
+    subscribe:
+      message:
+        payload:
+          type: object
+          properties:
+            customerId:
+              type: string
+              example: "123456"
+              description: "This field is to provide the customer's ID."
+            firstName:
+              type: string
+              example: "John"
+              description: "This field is to provide customer's first name."
+            lastName:
+              type: string
+              example: "Do"
+              description: "This field is to provide customer's last name."
+
+servers:
+  Production:
+    protocol: amqp
+    url: broker.techlightning.com
+    description: production env details.
+  QA:
+    protocol: amqp
+    url: broker-qa.techlightning.com
+    description: QA env details.
+                
+        

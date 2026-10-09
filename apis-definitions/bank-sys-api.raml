@@ -1,0 +1,19 @@
+#%RAML 1.0
+title: bank-sys-api
+
+/getAccountSummary:
+  description: "To get bank account details of a customer."
+  get:
+    queryParameters:
+      accountNumber: 
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+              {
+                "bankAccountNumber" : 12345,
+                "name" : "Jose Luis Rojas Gomez",
+                "country" : "Mexico CDMX"
+              }
