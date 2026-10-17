@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<error-handler name="global-error-handler" doc:id="43f32022-ec4a-455b-9163-05f96e66419a" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="11bca2db-6c1d-4b1f-938b-5a6e6b392da1" type="APIKIT:BAD_REQUEST"/>
+	</error-handler>
+	<sub-flow name="global-prepare-error-response-sub-flow" doc:id="10e6895b-1875-4f56-aec0-619ab2293acb" >
+		<ee:transform doc:name="Init Variables" doc:id="8dae2eda-65f6-49b6-a444-52aa34eafc98" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+'ERROR']]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="Error Response" doc:id="a9d6653d-429e-4037-b9d5-ad03f2772c4e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Error Log" doc:id="f9f43670-309c-4a11-89e7-79a0cd281292" />
+	</sub-flow>
+</mule>

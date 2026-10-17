@@ -266,6 +266,18 @@ If you want to decrypt you only have to use "decrypt" word instead of "encrypt".
 
 > [!NOTE]
 > Go to [Supported Algorithms](https://docs.mulesoft.com/mule-runtime/latest/secure-configuration-properties#supported_algorithms) to know all possible options.
+>
+> By default, Secure Properties module is not included into projects created into Anypoint Studio. So, you will have download from Exchange section. To add the module follow next steps:
+>
+> 1. Go to Mule Palette
+> 2. Click on "Search in Exchange" option
+> 3. Type: "secure" into dialog modal shown
+> 4. The wizard will show "Mule Secure Configuration" into "Available compatile modules" section
+> 5. Click on "Add" button
+> 6. The module will add it into "Selected modules" section
+> 7. And click on "Finish" button
+>
+> Now, you have Secure Properties module configured in your project.
 
 ### 29. Invoke Java method (static, non-static) from Mule Application
 

@@ -1,0 +1,10 @@
+http:
+  port: "18082"
+  
+database:
+  uhub:
+    host: "localhost"
+    port: "1521"
+    user: "userAdminTest"
+    pass: "![gK9jsTTdBBUfOC1BqIAbpw==]"
+    instance: "XE"
